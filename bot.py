@@ -1,10 +1,12 @@
 from discord.ext import commands
 from dotenv import load_dotenv
+from discord.ui import View, Button
 import discord
 from time import sleep
 import json
 import requests
 import random
+import pagination
 import os
 
 load_dotenv('.env')
@@ -24,6 +26,7 @@ async def on_ready():
     except Exception as e:
         print(f"Error syncing commands: {e}")
 
+# Message reactions
 @bot.event
 async def on_message(message):
     if message.content.lower() == 'ping':
@@ -93,7 +96,6 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 
     try:
         query = json.loads(raw_query_json)
-        query['id'] =  query_id
 
     except json.JSONDecodeError as e:
         print(f"Invalid JSON: {e}")
@@ -105,10 +107,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         print(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             response_json = response.json()
-            
-            #print("Search successful. First few results:")
-            #print(json.dumps(response_json.get("result", [])[:10], indent=2))
-
+            query_id = response_json.get("id")
         else:
             print(f"Error Response: {response.text}")
             exit()
@@ -177,13 +176,15 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 
                 embeds.append(embed)
 
-            # Send first embed using interaction.response
             if embeds:
-                await interaction.response.send_message(embed=embeds[0], ephemeral=False)
+                trade_search_url = f"https://www.pathofexile.com/trade2/search/poe2/Standard/{query_id}"
+                trade_button = Button(label="Open in Trade", style=discord.ButtonStyle.link, url=trade_search_url)
+                view = pagination.PaginatedView(embeds)
+                view.add_item(trade_button)
+
+                await interaction.response.send_message(embed=embeds[0], view=view)
     
-                # Send the rest
-                '''for embed in embeds[1:]:
-                    await interaction.followup.send(embed=embed)'''
+                print(f"Number of items found: {len(embeds)}")
             else:
                 await interaction.response.send_message("No items found.", ephemeral=True)
 

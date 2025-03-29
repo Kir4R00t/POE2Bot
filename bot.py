@@ -126,7 +126,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         print(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             data = response.json()
-            
+
             embeds = []
             for result in data['result']:
                 item = result.get("item", {})
@@ -136,6 +136,8 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
                 mods = item.get("explicitMods", [])
                 enchant = item.get("enchantMods", [])
                 icon_url = item.get("icon")
+                socketed_items = item.get("socketedItems", [])
+                socket_count = len(item.get("sockets", []))
 
                 # Create embed for this item
                 embed = discord.Embed(
@@ -151,6 +153,16 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
                 embed.set_thumbnail(url=icon_url)
                 embed.set_footer(text=f"Seller: {account} | Price: {price.get('amount')} {price.get('currency')}")
 
+                # Sockets
+                if socketed_items:
+                    socketed_text = "\n".join(
+                        f"- {s.get('name', '')} {s.get('typeLine', '')}".strip()
+                        for s in socketed_items
+                    )
+                    embed.add_field(name="Sockets", value=str(socket_count), inline=True)
+                    embed.add_field(name="Socketed Items", value=socketed_text, inline=False)
+                
+                # Explicit
                 if mods:
                     embed.add_field(
                         name="Explicit Mods",
@@ -158,6 +170,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
                         inline=False
                     )
 
+                # Enchants
                 if enchant:
                     embed.add_field(
                         name="Enchant Mods",

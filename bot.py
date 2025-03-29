@@ -89,14 +89,9 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         'Connection': 'keep-alive'
     }
 
-    # Parse query JSON & query ID
-    id = "youcanputwhateverinhere"
-    raw_query_json = query
-    query_id = id
-
+    # Decode query
     try:
-        query = json.loads(raw_query_json)
-
+        query = json.loads(query)
     except json.JSONDecodeError as e:
         print(f"Invalid JSON: {e}")
         exit()
@@ -132,11 +127,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         if response.status_code == 200:
             data = response.json()
             
-            #print("Fetched item data:")
-            #print(json.dumps(data, indent=2))
-        
             embeds = []
-
             for result in data['result']:
                 item = result.get("item", {})
                 listing = result.get("listing", {})
@@ -176,6 +167,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 
                 embeds.append(embed)
 
+            # Create pagination & add trade_url button
             if embeds:
                 trade_search_url = f"https://www.pathofexile.com/trade2/search/poe2/Standard/{query_id}"
                 trade_button = Button(label="Open in Trade", style=discord.ButtonStyle.link, url=trade_search_url)
@@ -183,18 +175,14 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
                 view.add_item(trade_button)
 
                 await interaction.response.send_message(embed=embeds[0], view=view)
-    
-                print(f"Number of items found: {len(embeds)}")
             else:
                 await interaction.response.send_message("No items found.", ephemeral=True)
-
 
             sleep(5)  # Avoid hammering the server
         else:
             print(f"Error Response: {response.text}")
+
     except Exception as e:
         print(f"Error fetching item data: {e}")
-
-
 
 bot.run(BOT_TOKEN)

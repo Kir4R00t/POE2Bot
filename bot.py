@@ -1,7 +1,8 @@
 from discord.ext import commands
-from dotenv import load_dotenv
-from discord.ui import View, Button
+from discord.ui import Button
 import discord
+
+from dotenv import load_dotenv
 from time import sleep
 import json
 import requests
@@ -230,6 +231,7 @@ async def currency(interaction: discord.Interaction):
             color=discord.Color.gold()
         )
 
+        # Discord emoji ids
         currency = {
             'alch': '<:alchemy:1355494399416471764>',
             'annul': '<:annulment:1355494427501662311>',
@@ -257,13 +259,12 @@ async def currency(interaction: discord.Interaction):
             'transmute': '<:transmutation:1355494366713745468>'
         }
 
+        # Load item data & match with emoji
         for line in data['items']:
             item_name = line['id']
             item_emoji = currency[item_name]
-
             price = line['latest_price']['price']
             
-
             embed.add_field(
                 name=f"{item_emoji} {item_name}",
                 value=f"price = {round(price, 3)} {currency['exalted']} ",

@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord.ui import Button
+from discord import app_commands
 import discord
 
 from dotenv import load_dotenv
@@ -216,10 +217,27 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
     except Exception as e:
         print(f"Error fetching item data: {e}")
 
-# Currency check
-@bot.tree.command(name="currency", description="Check the current market prices for basic currency !")
-async def currency(interaction: discord.Interaction):
-    url = 'https://poe2scout.com/api/items/currency'
+# Currency market check
+@bot.tree.command(name="poe2scout", description="Check the current market prices for basic currency !")
+@app_commands.describe(category="Select the category of currency")
+@app_commands.choices(category=[
+    app_commands.Choice(name="Currency", value="currency"),
+    app_commands.Choice(name="Soul Cores", value="soul_cores"),
+    app_commands.Choice(name="Breachstones", value="breachstones")
+])
+async def poe2scout(interaction: discord.Interaction, category: app_commands.Choice[str]):
+    # Get desired category
+    selected = category.value
+    if selected == "currency":
+        url = 'https://poe2scout.com/api/items/currency'
+    elif selected == "soul_cores":
+        url = 'https://poe2scout.com/api/items/ultimatum'
+    elif selected == "breachstones":
+        url = 'https://poe2scout.com/api/items/breachcatalyst'    
+    else:
+        await interaction.response.send_message("Unknown category.", ephemeral=True)
+        return
+        
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -232,7 +250,8 @@ async def currency(interaction: discord.Interaction):
         )
 
         # Discord emoji ids
-        currency = {
+        emojis = {
+            # Currency
             'alch': '<:alchemy:1355494399416471764>',
             'annul': '<:annulment:1355494427501662311>',
             'etcher': '<:arcanists_etcher:1356180485071441940>',
@@ -256,18 +275,49 @@ async def currency(interaction: discord.Interaction):
             'whetstone': '<:whetstone:1356180728844652567>',
             'regal-shard': '<:regal_shard:1356184910464815225>',
             'transmutation-shard': '<:transmutation_shard:1356185270705455195>',
-            'transmute': '<:transmutation:1355494366713745468>'
+            'transmute': '<:transmutation:1355494366713745468>',
+            
+            # Soul
+            'soul-core-of-atmohua':'<:Soul_Core_of_Atmohua:1356330777222189187>',
+            'soul-core-of-azcapa':'<:Soul_Core_of_Azcapa:1356330778845516006>',
+            'soul-core-of-cholotl':'<:Soul_Core_of_Cholotl:1356330780107739366>',
+            'soul-core-of-citaqualotl':'<:Soul_Core_of_Citaqualotl:1356330752358355251>',
+            'soul-core-of-jiquani':'<:Soul_Core_of_Jiquani:1356330754283667670>',
+            'soul-core-of-opiloti':'<:Soul_Core_of_Opiloti:1356330756057862375>',
+            'soul-core-of-puhuarte':'<:Soul_Core_of_Puhuarte:1356330726651461672>',
+            'soul-core-of-quipolatl':'<:Soul_Core_ofQuipolatl:1356330728195096696>',
+            'soul-core-of-tacati':'<:Soul_Core_of_Tacati:1356330730069954791>',
+            'soul-core-of-ticaba':'<:Soul_Core_of_Ticaba:1356330731990679706>',
+            'soul-core-of-topotante':'<:Soul_Core_of_Topotante:1356330689863094356>',
+            'soul-core-of-tzamoto':'<:Soul_Core_of_Tzamoto:1356330691524034791>',
+            'soul-core-of-xopec':'<:Soul_Core_of_Xopec:1356330692673536152>',
+            'soul-core-of-zalatl':'<:Soul_Core_of_Zalatl:1356330693650550920>',
+            'soul-core-of-zantipi':'<:Soul_Core_of_Zantipi:1356330662310838423>',
+
+            # Breach catalysts
+            'skittering-catalyst': '<:Skittering_Catalyst:1356334422189670470>',
+            'sibilant-catalyst': '<:Sibilant_Catalyst:1356334420826787901>',
+            'reaver-catalyst': '<:Reaver_Catalyst:1356334419182358719>',
+            'neural-catalyst': '<:Neural_Catalyst:1356334497939067147>',
+            'flesh-catalyst': '<:Flesh_Catalyst:1356334496978305194>',
+            'eshs-catalyst': '<:Eshs_Catalyst:1356334495661428889>',
+            'chayulas-catalyst': '<:Chayulas_Catalyst:1356334494344544366>',
+            'carapace-catalyst': '<:Carapace_Catalyst:1356334492805107933>',
+            'adaptive-catalyst': '<:Adaptive_Catalyst:1356334491269988503>',
+            'xophs-catalyst': '<:Xophs_Catalyst:1356334426149093386>',
+            'uul-netols-catalyst': '<:UulNetols_Catalyst:1356334424941396069>',
+            'tuls-catalyst': '<:Tuls_Catalyst:1356334423100100832>'
         }
 
         # Load item data & match with emoji
         for line in data['items']:
             item_name = line['id']
-            item_emoji = currency[item_name]
+            item_emoji = emojis[item_name]
             price = line['latest_price']['price']
             
             embed.add_field(
                 name=f"{item_emoji} {item_name}",
-                value=f"price = {round(price, 3)} {currency['exalted']} ",
+                value=f"price = {round(price, 3)} {emojis['exalted']} ",
                 inline=True
             )
 

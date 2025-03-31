@@ -226,9 +226,14 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 @app_commands.choices(category=[
     app_commands.Choice(name="Currency", value="currency"),
     app_commands.Choice(name="Soul Cores", value="soul_cores"),
-    app_commands.Choice(name="Breachstones", value="breachstones")
+    app_commands.Choice(name="Breachstones", value="breachstones"),
+    app_commands.Choice(name="Distilled Emotions", value="distilled")
+
 ])
 async def poe2scout(interaction: discord.Interaction, category: app_commands.Choice[str]):
+    # Load emojis
+    emojis = item_emojis.list
+
     # Get desired category
     selected = category.value
     if selected == "currency":
@@ -236,7 +241,9 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
     elif selected == "soul_cores":
         url = 'https://poe2scout.com/api/items/ultimatum'
     elif selected == "breachstones":
-        url = 'https://poe2scout.com/api/items/breachcatalyst'    
+        url = 'https://poe2scout.com/api/items/breachcatalyst' 
+    elif selected == "distilled":
+        url = 'https://poe2scout.com/api/items/deliriuminstill'       
     else:
         await interaction.response.send_message("Unknown category.", ephemeral=True)
         return
@@ -252,7 +259,7 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
             color=discord.Color.gold()
         )
 
-        emojis = item_emojis.list
+        
 
         # Load item data & match with emoji
         for line in data['items']:

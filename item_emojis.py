@@ -61,5 +61,17 @@ list = {
     'adaptive-catalyst': '<:Adaptive_Catalyst:1356334491269988503>',
     'xophs-catalyst': '<:Xophs_Catalyst:1356334426149093386>',
     'uul-netols-catalyst': '<:UulNetols_Catalyst:1356334424941396069>',
-    'tuls-catalyst': '<:Tuls_Catalyst:1356334423100100832>'
+    'tuls-catalyst': '<:Tuls_Catalyst:1356334423100100832>',
+
+    # Distilled emotions
+    'distilled-despair': '<:Distilled_Despair:1356347188279640186>',
+    'distilled-disgust': '<:Distilled_Disgust:1356347189676343567>',
+    'distilled-envy': '<:Distilled_Envy:1356347191026782458>',
+    'distilled-fear': '<:Distilled_Fear:1356347192209834014>',
+    'distilled-greed': '<:Distilled_Greed:1356347193711263865>',
+    'distilled-guilt': '<:Distilled_Guilt:1356347136459014349>',
+    'distilled-ire': '<:Distilled_Ire:1356347138212237483>',
+    'distilled-isolation': '<:Distilled_Isolation:1356347139827040486>',
+    'distilled-paranoia': '<:Distilled_Paranoia:1356347142209278044>',
+    'distilled-suffering': '<:Distilled_Suffering:1356347143161381118>'
 }

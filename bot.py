@@ -19,12 +19,29 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f"Bot is ready. Logged in as {bot.user}")
+    # Main bot guild
+    global guild
+    for guild in bot.guilds:
+        if guild.name == guild:
+            break
+
+    # Bot connection info
+    print(
+        f'{bot.user} is connected to the following guild:\n'
+        f'{guild.name}(id: {guild.id})'
+    )
+
+    # Commands sync
     try:
+        print("Synced commands: \n")
         synced = await bot.tree.sync()
-        print(f"Synced {len(synced)} command(s).")
-    except Exception as e:
-        print(f"Error syncing commands: {e}")
+        for x in synced:
+            print(f'{x}\n')
+        if synced is None:
+            print(f'{x} is not synced\n')
+
+    except Exception as error:
+        print(error)
 
 # Message reactions
 @bot.event
@@ -47,7 +64,7 @@ async def coinflip(interaction: discord.Interaction):
 
 # RTD
 @bot.tree.command(name="rtd", description="Roll the dice")
-async def coinflip(interaction: discord.Interaction):
+async def rtd(interaction: discord.Interaction):
     dice = random.randint(1, 6)
     await interaction.response.send_message(f"You have rolled {dice}", ephemeral=False)
 
@@ -198,4 +215,65 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
     except Exception as e:
         print(f"Error fetching item data: {e}")
 
+# Currency check
+@bot.tree.command(name="currency", description="Check the current market prices for basic currency !")
+async def currency(interaction: discord.Interaction):
+    url = 'https://poe2scout.com/api/items/currency'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+  
+        embed = discord.Embed(
+            title="<:div:1355492390353502388> Currency prices <:div:1355492390353502388>",
+            description=("Current rates for basic currency. NOTE: data is collected from poe2scout and they collect data every 3hrs"),
+            color=discord.Color.gold()
+        )
+
+        currency = {
+            'alch': '<:alchemy:1355494399416471764>',
+            'annul': '<:annulment:1355494427501662311>',
+            'etcher': '<:arcanists_etcher:1356180485071441940>',
+            'artificers': '<:artificers_orb:1356180614209863730>',
+            'artificers-shard': '<:artificers_shard:1356180664013291643>',
+            'aug': '<:augment:1355494457923080222>',
+            'chance': '<:chance:1355493353004863488>',
+            'chaos': '<:chaos:1355492533236535366>',
+            'divine': '<:div:1355492390353502388>',
+            'exalted': '<:exalt:1355493424207237210>',
+            'gcp': '<:gemcutters_prism:1356180779012587632>',
+            'bauble': '<:glassblowers_bauble:1356180826903285825>',
+            "Greater Jeweller's Orb": '<:greater_jewellers_orb:1356180894485844009>',
+            "Lesser Jeweller's Orb": '<:lesser_jewellers_orb:1356180955731329115>',
+            'mirror': '<:mirrorr:1355493390401147023>',
+            "Perfect Jeweller's Orb": '<:perfect_jewellers_orb:1356181022227697694>',
+            'regal': '<:regal:1355494330571165736>',
+            'scrap': '<:scrap:1356180559076003850>',
+            'wisdom': '<:scroll_of_wisdom:1356181080993960088>',
+            'vaal': '<:vaal:1355492657375215646>',
+            'whetstone': '<:whetstone:1356180728844652567>',
+            'regal-shard': '<:regal_shard:1356184910464815225>',
+            'transmutation-shard': '<:transmutation_shard:1356185270705455195>',
+            'transmute': '<:transmutation:1355494366713745468>'
+        }
+
+        for line in data['items']:
+            item_name = line['id']
+            item_emoji = currency[item_name]
+
+            price = line['latest_price']['price']
+            
+
+            embed.add_field(
+                name=f"{item_emoji} {item_name}",
+                value=f"price = {round(price, 3)} {currency['exalted']} ",
+                inline=True
+            )
+
+        await interaction.response.send_message(embed=embed)
+    
+    else:
+        print("ERROR: didn't get a response ...")
+
+# Run the bot
 bot.run(BOT_TOKEN)

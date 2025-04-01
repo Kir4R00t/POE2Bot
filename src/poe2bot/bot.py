@@ -13,6 +13,15 @@ import os
 import pagination
 import item_emojis
 
+import logging
+
+# Add Logging
+logger = logging.getLogger("poe2bot_discord")
+logger.setLevel(logging.INFO)
+console_handler = logging.StreamHandler()
+file_handler = logging.FileHandler(filename="poe2bot_discord.log", encoding="utf-8", mode="w")
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
 
 load_dotenv('.env')
 BOT_TOKEN = os.getenv('DISCORD')
@@ -21,6 +30,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+
 
 @bot.event
 async def on_ready():
@@ -31,22 +41,22 @@ async def on_ready():
             break
 
     # Bot connection info
-    print(
+    logger.info(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
     # Commands sync
     try:
-        print("Synced commands: \n")
+        logger.info("Synced commands: \n")
         synced = await bot.tree.sync()
         for x in synced:
-            print(f'{x}\n')
+            logger.info(f'{x}\n')
         if synced is None:
-            print(f'{x} is not synced\n')
+            logger.info(f'{x} is not synced\n')
 
     except Exception as error:
-        print(error)
+        logger.error(error)
 
 # Message reactions
 @bot.event
@@ -115,27 +125,27 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
     try:
         query = json.loads(query)
     except json.JSONDecodeError as e:
-        print(f"Invalid JSON: {e}")
+        logger.error(f"Invalid JSON: {e}")
         exit()
 
     # Send search request
     try:
         response = requests.post(search_url, headers=headers, json=query)
-        print(f"Status Code: {response.status_code}")
+        logger.info(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             response_json = response.json()
             query_id = response_json.get("id")
         else:
-            print(f"Error Response: {response.text}")
+            logger.warning(f"Error Response: {response.text}")
             exit()
     except Exception as e:
-        print(f"Error sending search request: {e}")
+        logger.error(f"Error sending search request: {e}")
         exit()
 
     # Fetch item details
     result_ids = response_json.get("result", [])[:10]
     if not result_ids:
-        print("No results found.")
+        logger.warning("No results found.")
         exit()
 
     result_ids_combined = ",".join(result_ids)
@@ -145,7 +155,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
     # Send fetch request
     try:
         response = requests.get(full_fetch_url, headers=headers)
-        print(f"Status Code: {response.status_code}")
+        logger.info(f"Status Code: {response.status_code}")
         if response.status_code == 200:
             data = response.json()
 
@@ -215,10 +225,10 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
 
             sleep(5)  # Avoid hammering the server
         else:
-            print(f"Error Response: {response.text}")
+            logger.error(f"Error Response: {response.text}")
 
     except Exception as e:
-        print(f"Error fetching item data: {e}")
+        logger.error(f"Error fetching item data: {e}")
 
 # Currency market check
 @bot.tree.command(name="poe2scout", description="Check the current market prices for specified item category")
@@ -258,7 +268,7 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
   
         embed = discord.Embed(
             title="<:div:1355492390353502388> Currency prices <:div:1355492390353502388>",
-            description=("Current rates for basic currency. NOTE: data is collected from poe2scout and they collect data every 3hrs"),
+            description="Current rates for basic currency. NOTE: data is collected from poe2scout and they collect data every 3hrs",
             color=discord.Color.gold()
         )
 
@@ -280,7 +290,7 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
     
     else:
         await interaction.response.send_message('poe2scout API is down', ephemeral=True)
-        print("Did not get a response ... poe2scout API may be down")
+        logger.warning("Did not get a response ... poe2scout API may be down")
 
 # Run the bot
 bot.run(BOT_TOKEN)

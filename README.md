@@ -14,3 +14,6 @@ So this is a bot that does a few cool things related to poe2
 - I want to improve currency command so that it will let you specify which items you want to convert (for example how many chaos does div cost)
 and let users check other categories of items (soul cores, splinters etc.)
 - I want to make trade command more 'user friendly' for now it is just a proof of concept
+
+### Deploy
+- `docker-compose up -d --build`

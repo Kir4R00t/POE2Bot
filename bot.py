@@ -221,13 +221,14 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         print(f"Error fetching item data: {e}")
 
 # Currency market check
-@bot.tree.command(name="poe2scout", description="Check the current market prices for basic currency !")
+@bot.tree.command(name="poe2scout", description="Check the current market prices for specified item category")
 @app_commands.describe(category="Select the category of currency")
 @app_commands.choices(category=[
     app_commands.Choice(name="Currency", value="currency"),
     app_commands.Choice(name="Soul Cores", value="soul_cores"),
     app_commands.Choice(name="Breachstones", value="breachstones"),
-    app_commands.Choice(name="Distilled Emotions", value="distilled")
+    app_commands.Choice(name="Distilled Emotions", value="distilled"),
+    app_commands.Choice(name="Essences", value="essences")
 
 ])
 async def poe2scout(interaction: discord.Interaction, category: app_commands.Choice[str]):
@@ -243,7 +244,9 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
     elif selected == "breachstones":
         url = 'https://poe2scout.com/api/items/breachcatalyst' 
     elif selected == "distilled":
-        url = 'https://poe2scout.com/api/items/deliriuminstill'       
+        url = 'https://poe2scout.com/api/items/deliriuminstill'
+    elif selected == "essences":
+        url = 'https://poe2scout.com/api/items/essences'            
     else:
         await interaction.response.send_message("Unknown category.", ephemeral=True)
         return
@@ -276,7 +279,8 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
         await interaction.response.send_message(embed=embed)
     
     else:
-        print("ERROR: didn't get a response ...")
+        await interaction.response.send_message('poe2scout API is down', ephemeral=True)
+        print("Did not get a response ... poe2scout API may be down")
 
 # Run the bot
 bot.run(BOT_TOKEN)

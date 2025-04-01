@@ -73,5 +73,31 @@ list = {
     'distilled-ire': '<:Distilled_Ire:1356347138212237483>',
     'distilled-isolation': '<:Distilled_Isolation:1356347139827040486>',
     'distilled-paranoia': '<:Distilled_Paranoia:1356347142209278044>',
-    'distilled-suffering': '<:Distilled_Suffering:1356347143161381118>'
+    'distilled-suffering': '<:Distilled_Suffering:1356347143161381118>',
+
+    # Essences
+    'essence-of-battle': '<:Essence_of_Battle:1356358602511745276>',
+    'essence-of-electricity': '<:Essence_of_Electricity:1356358603828629638>',
+    'essence-of-enhancement': '<:Essence_of_Enhancement:1356358605112213594>',
+    'essence-of-flames': '<:Essence_of_Flames:1356358606555189488>',
+    'essence-of-haste': '<:Essence_of_Haste:1356358607855292506>',
+    'essence-of-ice': '<:Essence_of_Ice:1356358609205727242>',
+    'essence-of-ruin': '<:Essence_of_Ruin:1356358628784865340>',
+    'essence-of-sorcery': '<:Essence_of_Sorcery:1356358630462722250>',
+    'essence-of-torment': '<:Essence_of_Torment:1356358637429326056>',
+    'essence-of-the-body': '<:Essence_of_the_Body:1356358631985250435>',
+    'essence-of-the-infinite': '<:Essence_of_the_Infinite:1356358634430402751>',
+    'essence-of-the-mind': '<:Essence_of_the_Mind:1356358635877433375>',
+    'greater-essence-of-battle': '<:Greater_Essence_of_Battle:1356360497384919265>',
+    'greater-essence-of-electricity': '<:Greater_Essence_of_Electricity:1356360498857381988>',
+    'greater-essence-of-enhancement': '<:Greater_Essence_of_Enhancement:1356360500526710955>',
+    'greater-essence-of-flames': '<:Greater_Essence_of_Flames:1356360501864562889>',
+    'greater-essence-of-haste': '<:Greater_Essence_of_Haste:1356360503194030141>',
+    'greater-essence-of-ice': '<:Greater_Essence_of_Ice:1356360504637001799>',
+    'greater-essence-of-ruin': '<:Greater_Essence_of_Ruin:1356360737702023296>',
+    'greater-essence-of-sorcery': '<:Greater_Essence_of_Sorcery:1356360739841118451>',
+    'greater-essence-of-torment': '<:Greater_Essence_of_Torment:1356360746337833171>',
+    'greater-essence-of-the-body': '<:Greater_Essence_of_the_Body:1356360740763865251>',
+    'greater-essence-of-the-infinite': '<:Greater_Essence_of_the_Infinite:1356360742604902471>',
+    'greater-essence-of-the-mind': '<:Greater_Essence_of_the_Mind:1356360744538603802> '
 }

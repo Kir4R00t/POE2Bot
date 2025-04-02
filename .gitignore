@@ -1,3 +1,4 @@
 .env
 test.py
 src/poe2bot/version.txt
+bot_old.py

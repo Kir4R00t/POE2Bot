@@ -2,3 +2,5 @@
 test.py
 src/poe2bot/version.txt
 bot_old.py
+poe2bot_discord.log
+__pycashe__

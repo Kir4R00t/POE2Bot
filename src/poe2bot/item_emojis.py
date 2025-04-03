@@ -14,6 +14,7 @@ list = {
     'artificers-shard': '<:artificers_shard:1356180664013291643>',
     'aug': '<:augment:1355494457923080222>',
     'chance': '<:chance:1355493353004863488>',
+    'chance-shard': '<:chance_shard:1357339212290064597>',
     'chaos': '<:chaos:1355492533236535366>',
     'divine': '<:div:1355492390353502388>',
     'exalted': '<:exalt:1355493424207237210>',

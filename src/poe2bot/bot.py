@@ -248,15 +248,15 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
     # Get desired category
     selected = category.value
     if selected == "currency":
-        url = 'https://poe2scout.com/api/items/currency'
+        url = 'https://poe2scout.com/api/items/currency/currency?page=1&league=Standard'
     elif selected == "soul_cores":
-        url = 'https://poe2scout.com/api/items/ultimatum'
+        url = 'https://poe2scout.com/api/items/currency/ultimatum?page=1&perPage=25&league=Standard'
     elif selected == "breachstones":
-        url = 'https://poe2scout.com/api/items/breachcatalyst' 
+        url = 'https://poe2scout.com/api/items/currency/breachcatalyst?page=1&perPage=25&league=Standard' 
     elif selected == "distilled":
-        url = 'https://poe2scout.com/api/items/deliriuminstill'
+        url = 'https://poe2scout.com/api/items/currency/deliriuminstill?page=1&perPage=25&league=Standard'
     elif selected == "essences":
-        url = 'https://poe2scout.com/api/items/essences'            
+        url = 'https://poe2scout.com/api/items/currency/essences?page=1&perPage=25&league=Standard'            
     else:
         await interaction.response.send_message("Unknown category.", ephemeral=True)
         return
@@ -267,18 +267,16 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
         data = response.json()
   
         embed = discord.Embed(
-            title="<:div:1355492390353502388> Currency prices <:div:1355492390353502388>",
+            title=f"{emojis['divine']} Currency prices {emojis['divine']}",
             description="Current rates for basic currency. NOTE: data is collected from poe2scout and they collect data every 3hrs",
             color=discord.Color.gold()
         )
 
-        
-
         # Load item data & match with emoji
         for line in data['items']:
-            item_name = line['id']
+            item_name = line['apiId']
             item_emoji = emojis[item_name]
-            price = line['latest_price']['price']
+            price = line['currentPrice']
             
             embed.add_field(
                 name=f"{item_emoji} {item_name}",

@@ -4,4 +4,4 @@ COPY . /bot
 
 RUN python -m pip install .
 
-ENTRYPOINT [ "python", "bot.py" ]
+ENTRYPOINT [ "python", "-m", "poe2bot.bot" ]

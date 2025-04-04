@@ -10,8 +10,8 @@ import requests
 import random
 import os
 
-import pagination
-import item_emojis
+from poe2bot import pagination
+from poe2bot import item_emojis
 
 import logging
 

@@ -231,6 +231,7 @@ async def trade(interaction: discord.Interaction, query: str): # , id: str
         logger.error(f"Error fetching item data: {e}")
 
 # Currency market check
+# https://poe2scout.com/api/swagger
 @bot.tree.command(name="poe2scout", description="Check the current market prices for specified item category")
 @app_commands.describe(category="Select the category of currency")
 @app_commands.choices(category=[
@@ -248,15 +249,15 @@ async def poe2scout(interaction: discord.Interaction, category: app_commands.Cho
     # Get desired category
     selected = category.value
     if selected == "currency":
-        url = 'https://poe2scout.com/api/items/currency/currency?page=1&league=Standard'
+        url = 'https://poe2scout.com/api/items/currency/currency'
     elif selected == "soul_cores":
-        url = 'https://poe2scout.com/api/items/currency/ultimatum?page=1&perPage=25&league=Standard'
+        url = 'https://poe2scout.com/api/items/currency/ultimatum'
     elif selected == "breachstones":
-        url = 'https://poe2scout.com/api/items/currency/breachcatalyst?page=1&perPage=25&league=Standard' 
+        url = 'https://poe2scout.com/api/items/currency/breachcatalyst' 
     elif selected == "distilled":
-        url = 'https://poe2scout.com/api/items/currency/deliriuminstill?page=1&perPage=25&league=Standard'
+        url = 'https://poe2scout.com/api/items/currency/deliriuminstill'
     elif selected == "essences":
-        url = 'https://poe2scout.com/api/items/currency/essences?page=1&perPage=25&league=Standard'            
+        url = 'https://poe2scout.com/api/items/currency/essences'            
     else:
         await interaction.response.send_message("Unknown category.", ephemeral=True)
         return

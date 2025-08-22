@@ -4,5 +4,3 @@ services:
     image: poe2bot
     env_file:
       - .env
-    volumes:
-      - ./poe2bot_discord.log:/bot/poe2bot_discord.log

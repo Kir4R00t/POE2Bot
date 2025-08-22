@@ -19,9 +19,6 @@ import logging
 logger = logging.getLogger("poe2bot_discord")
 logger.setLevel(logging.INFO)
 console_handler = logging.StreamHandler()
-file_handler = logging.FileHandler(filename="poe2bot_discord.log", encoding="utf-8", mode="w")
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
 
 load_dotenv('.env')
 BOT_TOKEN = os.getenv('DISCORD')
